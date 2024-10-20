@@ -1,12 +1,69 @@
 <?php
-include ("conexion.php");
+include("conexion.php");
 
+// Obtener los pasajeros y vuelos disponibles
+$pasajeros = $conn->query("SELECT pasajero_id, nombre FROM pasajero");
+$vuelos = $conn->query("SELECT vuelo_id, destino FROM vuelo");
+
+// Procesar la eliminación de reservas
+if (isset($_GET['delete_id'])) {
+    $delete_id = $_GET['delete_id'];
+    $sql = "DELETE FROM reserva WHERE reserva_id = $delete_id";
+    if ($conn->query($sql) === TRUE) {
+        // Reserva eliminada con éxito
+    } else {
+        echo "Error al eliminar reserva: " . $conn->error;
+    }
+}
+
+// Procesar la actualización de reservas
+if (isset($_POST['update'])) {
+    $id_reserva = $_POST['reserva_id'];
+    $id_pasajero = $_POST['pasajero_id'];
+    $id_vuelo = $_POST['vuelo_id'];
+    $asiento = $_POST['asiento'];
+    $clase = $_POST['clase'];
+    $fecha_reserva = $_POST['fecha_reserva'];
+    $equipaje = $_POST['equipaje_registrado'];
+
+    $sql = "UPDATE reserva SET 
+                pasajero_id='$id_pasajero', 
+                vuelo_id='$id_vuelo', 
+                asiento='$asiento', 
+                clase='$clase', 
+                fecha_reserva='$fecha_reserva', 
+                equipaje_registrado='$equipaje'
+            WHERE reserva_id=$id_reserva";
+    if ($conn->query($sql) === TRUE) {
+        // Reserva actualizada con éxito
+    } else {
+        echo "Error al actualizar reserva: " . $conn->error;
+    }
+}
+
+// Procesar la adición de una nueva reserva
+if (isset($_POST['add'])) {
+    $id_pasajero = $_POST['id_pasajero'];
+    $id_vuelo = $_POST['id_vuelo'];
+    $asiento = $_POST['asiento'];
+    $clase = $_POST['clase'];
+    $fecha_reserva = $_POST['fecha_reserva'];
+    $equipaje = $_POST['equipaje'];
+
+    $sql = "INSERT INTO reserva (pasajero_id, vuelo_id, asiento, clase, fecha_reserva, equipaje_registrado) 
+            VALUES ('$id_pasajero', '$id_vuelo', '$asiento', '$clase', '$fecha_reserva', '$equipaje')";
+    if ($conn->query($sql) === TRUE) {
+        // Reserva añadida con éxito
+    } else {
+        echo "Error al agregar reserva: " . $conn->error;
+    }
+}
 ?>
 
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Bootstrap Example</title>
+    <title>Reservas</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -23,7 +80,7 @@ include ("conexion.php");
                     <a class="nav-link" href="pasajeros.php">Pasajeros</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="Aerolíneas.php">Aerolíneas</a>
+                    <a class="nav-link" href="aerolineas.php">Aerolíneas</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="vuelo.php">Programar vuelos</a>
@@ -34,125 +91,165 @@ include ("conexion.php");
             </ul>
         </div>
     </nav>
+
     <div class="container mt-3">
-        <h2>Aerolíneas registradas</h2>
-        <p>A continuación se muestran las aerolíneas registradas en nuestro aeropuerto:</p>            
+        <h2>Reservas registradas</h2>
         <table class="table table-dark table-striped">
             <thead>
                 <tr>
-                    <th>id_reserva</th>
-                    <th>id_pasajero</th>
-                    <th>id_vuelo</th>
-                    <th>asiento</th>
-                    <th>clase</th>
-                    <th>fecha de reserva</th>
-                    <th>equipaje</th>
+                    <th>ID Reserva</th>
+                    <th>ID Pasajero</th>
+                    <th>ID Vuelo</th>
+                    <th>Asiento</th>
+                    <th>Clase</th>
+                    <th>Fecha Reserva</th>
+                    <th>Equipaje</th>
                     <th>Acción</th>
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td>
-                        <button type="button" class="btn btn-outline-danger">Eliminar</button>
-                        <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#myModal2">Actualizar</button>
-                    </td>
-                </tr>
+                <?php
+                $sql = "SELECT * FROM reserva";
+                $result = $conn->query($sql);
+
+                if ($result->num_rows > 0) {
+                    while ($row = $result->fetch_assoc()) {
+                        echo "<tr>
+                                <td>{$row['reserva_id']}</td>
+                                <td>{$row['pasajero_id']}</td>
+                                <td>{$row['vuelo_id']}</td>
+                                <td>{$row['asiento']}</td>
+                                <td>{$row['clase']}</td>
+                                <td>{$row['fecha_reserva']}</td>
+                                <td>{$row['equipaje_registrado']}</td>
+                                <td>
+                                    <a href='reservas.php?delete_id={$row['reserva_id']}' class='btn btn-outline-danger'>Eliminar</a>
+                                    <button type='button' class='btn btn-outline-secondary' data-bs-toggle='modal' data-bs-target='#updateModal{$row['reserva_id']}'>Actualizar</button>
+                                </td>
+                              </tr>";
+
+                        // Modal para actualizar reserva
+                        echo "
+                            <div class='modal' id='updateModal{$row['reserva_id']}'>
+                                <div class='modal-dialog modal-lg'>
+                                    <div class='modal-content'>
+                                        <div class='modal-header'>
+                                            <h4 class='modal-title'>Actualizar Reserva</h4>
+                                            <button type='button' class='btn-close' data-bs-dismiss='modal'></button>
+                                        </div>
+                                        <div class='modal-body'>
+                                            <form method='POST' action='reservas.php'>
+                                                <input type='hidden' name='reserva_id' value='{$row['reserva_id']}'>
+                                                <div class='mb-3'>
+                                                    <label>ID Pasajero:</label>
+                                                    <select class='form-control' name='pasajero_id' required>
+                                                        <option value='{$row['pasajero_id']}'>Seleccionado: {$row['pasajero_id']}</option>";
+                                                        while ($pasajero = $pasajeros->fetch_assoc()) {
+                                                            echo "<option value='{$pasajero['pasajero_id']}'>{$pasajero['nombre']}</option>";
+                                                        }
+                        echo "                      </select>
+                                                </div>
+                                                <div class='mb-3'>
+                                                    <label>ID Vuelo:</label>
+                                                    <select class='form-control' name='vuelo_id' required>
+                                                        <option value='{$row['vuelo_id']}'>Seleccionado: {$row['vuelo_id']}</option>";
+                                                        while ($vuelo = $vuelos->fetch_assoc()) {
+                                                            echo "<option value='{$vuelo['vuelo_id']}'>{$vuelo['destino']}</option>";
+                                                        }
+                        echo "                      </select>
+                                                </div>
+                                                <div class='mb-3'>
+                                                    <label>Asiento:</label>
+                                                    <input type='text' class='form-control' name='asiento' value='{$row['asiento']}' required>
+                                                </div>
+                                                <div class='mb-3'>
+                                                    <label>Clase:</label>
+                                                    <input type='text' class='form-control' name='clase' value='{$row['clase']}' required>
+                                                </div>
+                                                <div class='mb-3'>
+                                                    <label>Fecha Reserva:</label>
+                                                    <input type='date' class='form-control' name='fecha_reserva' value='{$row['fecha_reserva']}' required>
+                                                </div>
+                                                <div class='mb-3'>
+                                                    <label>Equipaje Registrado:</label>
+                                                    <input type='text' class='form-control' name='equipaje_registrado' value='{$row['equipaje_registrado']}' required>
+                                                </div>
+                                                <button type='submit' name='update' class='btn btn-outline-secondary'>Actualizar</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>";
+                    }
+                } else {
+                    echo "<tr><td colspan='8'>No hay reservas registradas</td></tr>";
+                }
+                ?>
             </tbody>
         </table>
     </div>
+
+    <!-- Modal para agregar reserva -->
     <div class="container mt-3">
-        <h3>Large Modal Example</h3>
-        <p>Click on the button to open the modal.</p> 
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#myModal">
-            Open modal
-        </button>
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addModal">Agregar Reserva</button>
     </div>
-    <div class="modal" id="myModal">
+    <div class="modal" id="addModal">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
-
-            <!-- Modal Header -->
-            <div class="modal-header">
-                <h4 class="modal-title">Agregar nueva arolinea</h4>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-
-            <!-- Modal body -->
-            <div class="modal-body">
-                <div class="container mt-3">
-                    <h2>Stacked form</h2>
-                    <form action="/action_page.php">
-                        <div class="mb-3 mt-3">
-                            <label for="email">Email:</label>
-                            <input type="email" class="form-control" id="email" placeholder="Enter email" name="email">
+                <div class="modal-header">
+                    <h4 class="modal-title">Agregar nueva Reserva</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form method="POST" action="reservas.php">
+                        <div class="mb-3">
+                            <label>ID Pasajero:</label>
+                            <select class="form-control" name="id_pasajero" required>
+                                <?php
+                                $pasajeros->data_seek(0); // Reiniciar puntero
+                                while ($pasajero = $pasajeros->fetch_assoc()) {
+                                    echo "<option value='{$pasajero['pasajero_id']}'>{$pasajero['pasajero_id']}</option>";
+                                }
+                                ?>
+                            </select>
                         </div>
                         <div class="mb-3">
-                            <label for="pwd">Password:</label>
-                            <input type="password" class="form-control" id="pwd" placeholder="Enter password" name="pswd">
-                        </div>
-                        <div class="form-check mb-3">
-                            <label class="form-check-label">
-                                <input class="form-check-input" type="checkbox" name="remember"> Remember me
-                            </label>
-                        </div>
-                        <button type="submit" class="btn btn-outline-dark">Submit</button>
-                    </form>
-                </div>
-            </div>
-
-            <!-- Modal footer -->
-            <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
-            </div>
-            </div>
-        </div>
-    </div>
-    <div class="modal" id="myModal2">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-
-            <!-- Modal Header -->
-            <div class="modal-header">
-                <h4 class="modal-title">Actualizar datos</h4>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-
-            <!-- Modal body -->
-            <div class="modal-body">
-                <div class="container mt-3">
-                    <h2>Stacked form</h2>
-                    <form action="/action_page.php">
-                        <div class="mb-3 mt-3">
-                            <label for="email">Email:</label>
-                            <input type="email" class="form-control" id="email" placeholder="Enter email" name="email">
+                            <label>ID Vuelo:</label>
+                            <select class="form-control" name="id_vuelo" required>
+                                <?php
+                                $vuelos->data_seek(0); // Reiniciar puntero
+                                while ($vuelo = $vuelos->fetch_assoc()) {
+                                    echo "<option value='{$vuelo['vuelo_id']}'>{$vuelo['vuelo_id']}</option>";
+                                }
+                                ?>
+                            </select>
                         </div>
                         <div class="mb-3">
-                            <label for="pwd">Password:</label>
-                            <input type="password" class="form-control" id="pwd" placeholder="Enter password" name="pswd">
+                            <label>Asiento:</label>
+                            <input type="text" class="form-control" name="asiento" required>
                         </div>
-                        <div class="form-check mb-3">
-                            <label class="form-check-label">
-                                <input class="form-check-input" type="checkbox" name="remember"> Remember me
-                            </label>
+                        <div class="mb-3">
+                            <label>Clase:</label>
+                            <select class="form-control" name="clase" required>
+                                <option value="económica">Económica</option>
+                                <option value="ejecutiva">Ejecutiva</option>
+                                <option value="primera clase">Primera Clase</option>
+                            </select>
                         </div>
-                        <button type="submit" class="btn btn-outline-dark">Submit</button>
+                        <div class="mb-3">
+                            <label>Fecha Reserva:</label>
+                            <input type="date" class="form-control" name="fecha_reserva" required>
+                        </div>
+                        <div class="mb-3">
+                            <label>Equipaje Registrado:</label>
+                            <input type="text" class="form-control" name="equipaje" required>
+                        </div>
+                        <button type="submit" name="add" class="btn btn-primary">Agregar Reserva</button>
                     </form>
                 </div>
-            </div>
-
-            <!-- Modal footer -->
-            <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
-            </div>
             </div>
         </div>
     </div>
 </body>
 </html>
+
