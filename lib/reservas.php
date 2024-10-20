@@ -103,7 +103,7 @@ if (isset($_POST['add'])) {
                     <th>Asiento</th>
                     <th>Clase</th>
                     <th>Fecha Reserva</th>
-                    <th>Equipaje</th>
+                    <th>Peso del equipaje</th>
                     <th>Acción</th>
                 </tr>
             </thead>
@@ -121,7 +121,7 @@ if (isset($_POST['add'])) {
                                 <td>{$row['asiento']}</td>
                                 <td>{$row['clase']}</td>
                                 <td>{$row['fecha_reserva']}</td>
-                                <td>{$row['equipaje_registrado']}</td>
+                                <td>{$row['equipaje_registrado']} kg</td>
                                 <td>
                                     <a href='reservas.php?delete_id={$row['reserva_id']}' class='btn btn-outline-danger'>Eliminar</a>
                                     <button type='button' class='btn btn-outline-secondary' data-bs-toggle='modal' data-bs-target='#updateModal{$row['reserva_id']}'>Actualizar</button>
@@ -252,4 +252,3 @@ if (isset($_POST['add'])) {
     </div>
 </body>
 </html>
-
