@@ -75,7 +75,7 @@ $result = $conn->query($sql);
                     <a class="nav-link" href="#">Pasajeros</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="Aerolíneas.php">Aerolíneas</a>
+                    <a class="nav-link" href="aerolíneas.php">Aerolíneas</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="vuelo.php">Programar vuelos</a>
