@@ -159,7 +159,7 @@ include ("lib/conexion.php");
                     <th>Asiento</th>
                     <th>Clase</th>
                     <th>Fecha de la reserva</th>
-                    <th>Equipaje registrado</th>
+                    <th>Peso del equipaje registrado</th>
                 </tr>
             </thead>
             <tbody>
@@ -176,7 +176,7 @@ include ("lib/conexion.php");
                                 <td>{$row['asiento']}</td>
                                 <td>{$row['clase']}</td>
                                 <td>{$row['fecha_reserva']}</td>
-                                <td>{$row['equipaje_registrado']}</td>
+                                <td>{$row['equipaje_registrado']} kg</td>
                             </tr>";
                     }
                 } else {
