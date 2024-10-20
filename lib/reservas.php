@@ -26,31 +26,39 @@ include ("conexion.php");
                     <a class="nav-link" href="Aerolíneas.php">Aerolíneas</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Programar vuelos</a>
+                    <a class="nav-link" href="vuelo.php">Programar vuelos</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="reservas.php">Reservas</a>
+                    <a class="nav-link" href="#">Reservas</a>
                 </li>
             </ul>
         </div>
     </nav>
     <div class="container mt-3">
-        <h2>Vuelos programados</h2>
-        <p>A continuación se muestran los vuelos programados:</p>            
+        <h2>Aerolíneas registradas</h2>
+        <p>A continuación se muestran las aerolíneas registradas en nuestro aeropuerto:</p>            
         <table class="table table-dark table-striped">
             <thead>
                 <tr>
-                    <th>Firstname</th>
-                    <th>Lastname</th>
-                    <th>Email</th>
+                    <th>id_reserva</th>
+                    <th>id_pasajero</th>
+                    <th>id_vuelo</th>
+                    <th>asiento</th>
+                    <th>clase</th>
+                    <th>fecha de reserva</th>
+                    <th>equipaje</th>
                     <th>Acción</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    <td>John</td>
-                    <td>Doe</td>
-                    <td>john@example.com</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
                     <td>
                         <button type="button" class="btn btn-outline-danger">Eliminar</button>
                         <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#myModal2">Actualizar</button>
