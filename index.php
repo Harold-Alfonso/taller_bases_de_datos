@@ -23,7 +23,7 @@ include ("lib/conexion.php");
                     <a class="nav-link" href="lib/pasajeros.php">Pasajeros</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="lib/Aerolíneas.php">Aerolíneas</a>
+                    <a class="nav-link" href="lib/aerolíneas.php">Aerolíneas</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="lib/vuelo.php">Programar vuelos</a>
