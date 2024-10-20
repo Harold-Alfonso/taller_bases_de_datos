@@ -80,7 +80,7 @@ if (isset($_POST['add'])) {
                     <a class="nav-link" href="pasajeros.php">Pasajeros</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="aerolineas.php">Aerolíneas</a>
+                    <a class="nav-link" href="aerolíneas.php">Aerolíneas</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="vuelo.php">Programar vuelos</a>
