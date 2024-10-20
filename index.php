@@ -28,6 +28,9 @@ include ("lib/conexion.php");
                 <li class="nav-item">
                     <a class="nav-link" href="lib/vuelo.php">Programar vuelos</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="lib/reservas.php">Reservas</a>
+                </li>
             </ul>
         </div>
     </nav>
