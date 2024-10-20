@@ -110,7 +110,7 @@ $result_aerolineas = $conn->query($sql_aerolineas);
                     <a class="nav-link" href="pasajeros.php">Pasajeros</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="aerolineas.php">Aerolíneas</a>
+                    <a class="nav-link" href="aerolíneas.php">Aerolíneas</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#">Programar vuelos</a>
