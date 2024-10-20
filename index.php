@@ -49,14 +49,25 @@ include ("lib/conexion.php");
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
+                <?php
+                $sql = "SELECT nombre, apellido, documento_identidad, nacionalidad, telefono, correo_electronico FROM pasajero";
+                $result = $conn->query($sql);
+
+                if ($result->num_rows > 0) {
+                    while($row = $result->fetch_assoc()) {
+                        echo "<tr>
+                                <td>{$row['nombre']}</td>
+                                <td>{$row['apellido']}</td>
+                                <td>{$row['documento_identidad']}</td>
+                                <td>{$row['nacionalidad']}</td>
+                                <td>{$row['telefono']}</td>
+                                <td>{$row['correo_electronico']}</td>
+                            </tr>";
+                    }
+                } else {
+                    echo "<tr><td colspan='6'>No hay pasajeros registrados</td></tr>";
+                }
+                ?>
             </tbody>
         </table>
     </div>
@@ -74,13 +85,24 @@ include ("lib/conexion.php");
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
+                <?php
+                $sql = "SELECT nombre_aerolinea, pais_origen, codigo_aerolinea, telefono_contacto, correo_aerolinea FROM aerolinea";
+                $result = $conn->query($sql);
+
+                if ($result->num_rows > 0) {
+                    while($row = $result->fetch_assoc()) {
+                        echo "<tr>
+                                <td>{$row['nombre_aerolinea']}</td>
+                                <td>{$row['pais_origen']}</td>
+                                <td>{$row['codigo_aerolinea']}</td>
+                                <td>{$row['telefono_contacto']}</td>
+                                <td>{$row['correo_aerolinea']}</td>
+                            </tr>";
+                    }
+                } else {
+                    echo "<tr><td colspan='5'>No hay aerolíneas registradas</td></tr>";
+                }
+                ?>
             </tbody>
         </table>
     </div>
@@ -100,43 +122,67 @@ include ("lib/conexion.php");
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
+                <?php
+                $sql = "SELECT v.numero_vuelo, v.fecha_salida, v.fecha_llegada, v.origen, v.destino, v.estado, a.nombre_aerolinea
+                    FROM vuelo v
+                    JOIN aerolinea a ON v.aerolinea_id = a.aerolinea_id";
+                $result = $conn->query($sql);
+
+                if ($result->num_rows > 0) {
+                    while($row = $result->fetch_assoc()) {
+                        echo "<tr>
+                                <td>{$row['nombre_aerolinea']}</td>
+                                <td>{$row['numero_vuelo']}</td>
+                                <td>{$row['fecha_salida']}</td>
+                                <td>{$row['fecha_llegada']}</td>
+                                <td>{$row['origen']}</td>
+                                <td>{$row['destino']}</td>
+                                <td>{$row['estado']}</td>
+                            </tr>";
+                    }
+                } else {
+                    echo "<tr><td colspan='7'>No hay vuelos programados</td></tr>";
+                }
+                ?>
             </tbody>
         </table>
     </div>
     <div class="container mt-3">
-        <h2>Reservas programados</h2>
-        <p>A continuación se muestran las reservas programados:</p>            
+        <h2>Reservas programadas</h2>
+        <p>A continuación se muestran las reservas programadas:</p>            
         <table class="table table-dark table-striped">
             <thead>
                 <tr>
-                    <th>Numero de reserva</th>
+                    <th>Número de reserva</th>
                     <th>id-Pasajero</th>
-                    <th>id-vuelo</th>
-                    <th>asiento</th>
-                    <th>clase</th>
-                    <th>fecha de la reserva</th>
-                    <th>equipaje registrado</th>
+                    <th>id-Vuelo</th>
+                    <th>Asiento</th>
+                    <th>Clase</th>
+                    <th>Fecha de la reserva</th>
+                    <th>Equipaje registrado</th>
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
+                <?php
+                $sql = "SELECT reserva_id, pasajero_id, vuelo_id, asiento, clase, fecha_reserva, equipaje_registrado FROM reserva";
+                $result = $conn->query($sql);
+
+                if ($result->num_rows > 0) {
+                    while($row = $result->fetch_assoc()) {
+                        echo "<tr>
+                                <td>{$row['reserva_id']}</td>
+                                <td>{$row['pasajero_id']}</td>
+                                <td>{$row['vuelo_id']}</td>
+                                <td>{$row['asiento']}</td>
+                                <td>{$row['clase']}</td>
+                                <td>{$row['fecha_reserva']}</td>
+                                <td>{$row['equipaje_registrado']}</td>
+                            </tr>";
+                    }
+                } else {
+                    echo "<tr><td colspan='7'>No hay reservas programadas</td></tr>";
+                }
+                ?>
             </tbody>
         </table>
     </div>
