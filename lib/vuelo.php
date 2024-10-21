@@ -80,7 +80,11 @@ if (isset($_POST['update'])) {
 }
 
 // Obtener todos los vuelos
-$sql_vuelos = "SELECT * FROM vuelo";
+$sql_vuelos = "
+    SELECT v.vuelo_id, v.numero_vuelo, v.fecha_salida, v.fecha_llegada, v.origen, v.destino, v.estado, a.nombre_aerolinea 
+    FROM vuelo v
+    JOIN aerolinea a ON v.aerolinea_id = a.aerolinea_id
+";
 $result_vuelos = $conn->query($sql_vuelos);
 
 // Obtener todas las aerolíneas
@@ -143,7 +147,7 @@ $result_aerolineas = $conn->query($sql_aerolineas);
                 <?php while ($row = $result_vuelos->fetch_assoc()): ?>
                     <tr>
                         <td><?php echo $row['vuelo_id']; ?></td>
-                        <td><?php echo $row['aerolinea_id']; ?></td>
+                        <td><?php echo $row['nombre_aerolinea']; ?></td>
                         <td><?php echo $row['numero_vuelo']; ?></td>
                         <td><?php echo $row['fecha_salida']; ?></td>
                         <td><?php echo $row['fecha_llegada']; ?></td>
@@ -154,7 +158,7 @@ $result_aerolineas = $conn->query($sql_aerolineas);
                             <a href="vuelo.php?delete=<?php echo $row['vuelo_id']; ?>" class="btn btn-outline-danger">Eliminar</a>
                             <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#updateModal" 
                                 data-vuelo_id="<?php echo $row['vuelo_id']; ?>" 
-                                data-aerolinea_id="<?php echo $row['aerolinea_id']; ?>"
+                                data-aerolinea_id="<?php echo $row['nombre_aerolinea']; ?>"
                                 data-numero_vuelo="<?php echo $row['numero_vuelo']; ?>"
                                 data-fecha_salida="<?php echo $row['fecha_salida']; ?>"
                                 data-fecha_llegada="<?php echo $row['fecha_llegada']; ?>"
